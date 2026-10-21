@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments and dependencies
+.venv/
+env/
+venv/
+ENV/
+
+# Pytest & Ruff caches
+.pytest_cache/
+.ruff_cache/
+
+# Local secret environment configuration
+.env
+
+# Uploaded documents
+uploads/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Archive files
+*.zip
