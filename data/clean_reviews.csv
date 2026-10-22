@@ -1,0 +1,10 @@
+review_id,customer_name,rating,review_text,review_date
+1,Alice Johnson,5,The AI document assistant works remarkably well for PDF queries!,2026-10-15
+2,Bob Smith,4,Fast response times and accurate source citations.,2026-10-15
+3,Charlie Davis,1,Encountered a server timeout when uploading large files.,2026-10-16
+4,Diana Prince,3,Good UI but needs dark mode support.,2026-10-16
+5,Evan Wright,5,Excellent tool! Streamlined our entire document review workflow.,2026-10-17
+8,Hannah Abbott,5,Docker setup made deployment completely seamless on our servers.,2026-10-19
+9,Ian Malcolm,4,The hybrid search feature is brilliant.,2026-10-19
+10,Julia Roberts,5,Highly recommended for team knowledge bases.,2026-10-20
+12,Kevin Bacon,5,Handles complex technical manuals with ease.,2026-10-21
