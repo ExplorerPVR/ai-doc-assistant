@@ -1,5 +1,6 @@
 """Customer reviews CSV cleaning script with deduplication and retry mechanism."""
 
+import argparse
 import csv
 import functools
 import logging
@@ -34,8 +35,10 @@ def retry(
                     return func(*args, **kwargs)
                 except exceptions as err:
                     last_err = err
+                    err_cls = type(err).__name__
                     logger.warning(
-                        f"Attempt {attempt}/{times} for '{func.__name__}' failed: {err}"
+                        f"Attempt {attempt}/{times} for '{func.__name__}' "
+                        f"failed with {err_cls}: {err}"
                     )
                     if attempt == times:
                         logger.error(
@@ -133,18 +136,47 @@ def run_clean_reviews(input_path: Path, output_path: Path) -> dict[str, int]:
 
 
 def main() -> None:
-    """Entrypoint for command line execution."""
-    if len(sys.argv) < 3:
-        error_msg = (
-            "Error: Missing required arguments.\n"
-            "Usage: uv run python scripts/clean_reviews.py <input.csv> <output.csv>"
-        )
-        logger.error(error_msg)
-        print(error_msg, file=sys.stderr)
-        sys.exit(1)
+    """CLI entrypoint supporting flags, positional args, and defaults."""
+    parser = argparse.ArgumentParser(
+        description="Clean messy customer reviews CSV by dropping empty rows."
+    )
+    parser.add_argument(
+        "positional_args",
+        nargs="*",
+        help="Optional positional arguments: <input_path> <output_path>",
+    )
+    parser.add_argument(
+        "--input",
+        "-i",
+        dest="input_flag",
+        type=Path,
+        default=None,
+        help="Path to input CSV file (default: data/messy_reviews.csv)",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        dest="output_flag",
+        type=Path,
+        default=None,
+        help="Path to output CSV file (default: data/clean_reviews.csv)",
+    )
+    args = parser.parse_args()
 
-    input_path = Path(sys.argv[1])
-    output_path = Path(sys.argv[2])
+    # Determine input and output paths
+    if args.input_flag:
+        input_path = args.input_flag
+    elif args.positional_args and len(args.positional_args) >= 1:
+        input_path = Path(args.positional_args[0])
+    else:
+        input_path = Path("data/messy_reviews.csv")
+
+    if args.output_flag:
+        output_path = args.output_flag
+    elif args.positional_args and len(args.positional_args) >= 2:
+        output_path = Path(args.positional_args[1])
+    else:
+        output_path = Path("data/clean_reviews.csv")
 
     try:
         run_clean_reviews(input_path, output_path)
